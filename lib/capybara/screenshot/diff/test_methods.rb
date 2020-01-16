@@ -88,7 +88,7 @@ module Capybara
           new_file_name = "#{Screenshot.screenshot_area_abs}/#{name + "_diff"}.png"
           old_file_name = "#{Screenshot.screenshot_area_abs}/#{name}.png"
 
-          FileUtils.mkdir_p File.dirname(file_name)
+          FileUtils.mkdir_p File.dirname(old_file_name)
           comparison = ImageCompare.new(save_mode ? old_file_name : new_file_name,
                                         save_mode ? nil : old_file_name,
               dimensions: Screenshot.window_size, color_distance_limit: color_distance_limit,
