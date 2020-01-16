@@ -179,8 +179,8 @@ module Capybara
           end
         end
 
-        def not_different
-          clean_tmp_files
+        def not_different #Progenda edited, do not clean old screen if same image
+          #clean_tmp_files
           false
         end
 
