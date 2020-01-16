@@ -95,8 +95,8 @@ module Capybara
               area_size_limit: area_size_limit, shift_distance_limit: shift_distance_limit,
               skip_area: skip_area)
           #checkout_vcs(name, comparison)
-          puts("updated")
-          take_stable_screenshot(comparison, color_distance_limit: color_distance_limit,
+          puts("update")
+          take_simple_screenshot(comparison, color_distance_limit: color_distance_limit,
                                              shift_distance_limit: shift_distance_limit,
                                              area_size_limit: area_size_limit,
                                              skip_area: skip_area,
