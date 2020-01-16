@@ -101,7 +101,9 @@ module Capybara
                                              area_size_limit: area_size_limit,
                                              skip_area: skip_area,
                                              stability_time_limit: stability_time_limit,
-                                             wait: wait)
+                                             wait: wait,
+                                             save_mode: save_mode
+          )
           return unless comparison.old_file_exists?
 
           (@test_screenshots ||= []) << [caller(1..1).first, name, comparison]
