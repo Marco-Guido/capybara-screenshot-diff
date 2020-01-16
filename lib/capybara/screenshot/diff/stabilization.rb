@@ -128,6 +128,14 @@ module Capybara
           # ODOT
         end
 
+        def save_diff(comparison) #Added by Progenda
+          stabilization_comparison = ImageCompare.new(comparison.new_file_name, comparison.old_file_name,
+                                                      color_distance_limit: comparison.color_distance_limit,
+                                                      shift_distance_limit: comparison.shift_distance_limit,
+                                                      area_size_limit: comparison.area_size_limit, skip_area: comparison.skip_area)
+          return stabilization_comparison.different?
+        end
+
         def clean_files(comparison, is_different) #Added by Progenda
           if File.exist?(comparison.annotated_new_file_name)
             FileUtils.cp comparison.annotated_new_file_name, comparison.new_file_name
