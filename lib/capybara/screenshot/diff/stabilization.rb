@@ -20,6 +20,18 @@ module Capybara
           }()
         JS
 
+        def take_simple_screenshot(comparison, color_distance_limit:, shift_distance_limit:,
+                                   area_size_limit:, skip_area:, stability_time_limit:, wait:, save_mode:)  #Added by Progenda
+          blurred_input = prepare_page_for_screenshot(timeout: wait)
+          take_right_size_screenshot(comparison)
+          if ! save_mode
+            is_different = save_diff(comparison)
+            clean_files(comparison, is_different)
+          end
+        ensure
+          blurred_input&.click
+        end
+
         def take_stable_screenshot(comparison, color_distance_limit:, shift_distance_limit:,
             area_size_limit:, skip_area:, stability_time_limit:, wait:)
           blurred_input = prepare_page_for_screenshot(timeout: wait)
@@ -114,6 +126,19 @@ module Capybara
           # TODO(uwe): Remove when chromedriver takes right size screenshots
           reduce_retina_image_size(comparison.new_file_name)
           # ODOT
+        end
+
+        def clean_files(comparison, is_different) #Added by Progenda
+          if File.exist?(comparison.annotated_new_file_name)
+            FileUtils.cp comparison.annotated_new_file_name, comparison.new_file_name
+            File.delete(comparison.annotated_new_file_name)
+          end
+          if File.exist?(comparison.annotated_old_file_name)
+            File.delete(comparison.annotated_old_file_name)
+          end
+          if ! is_different
+            File.delete(comparison.new_file_name)
+          end
         end
 
         def check_max_wait_time(comparison, screenshot_started_at, wait:, shift_distance_limit:)
