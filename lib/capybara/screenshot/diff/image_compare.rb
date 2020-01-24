@@ -285,6 +285,7 @@ module Capybara
               right = x if x > right
               x
             end
+            puts(y)
             (old_img.width - 1).step(right + 1, -1).find do |x|
               unless same_color?(old_img, new_img, x, y)
                 bottom = y
