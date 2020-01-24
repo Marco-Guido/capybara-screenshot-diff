@@ -273,8 +273,8 @@ module Capybara
           bottom = @bottom
           left = @left || old_img.width - 1
           right = @right || 0
-          puts("old_img.height #{old_img.height}")
-          puts("0...left #{left}")
+          #puts("old_img.height #{old_img.height}")
+          #puts("0...left #{left}")
           old_img.height.times do |y|
             (0...left).find do |x|
               next if same_color?(old_img, new_img, x, y)
