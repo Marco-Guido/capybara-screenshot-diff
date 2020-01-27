@@ -72,8 +72,7 @@ module Capybara
             color_distance_limit: Diff.color_distance_limit,
             shift_distance_limit: Diff.shift_distance_limit, skip_area: Diff.skip_area,
             stability_time_limit: Screenshot.stability_time_limit,
-            wait: Capybara.default_max_wait_time,
-            save_mode: false
+            wait: Capybara.default_max_wait_time
         )
           return unless Screenshot.active?
           return if window_size_is_wrong?
@@ -87,6 +86,8 @@ module Capybara
           name = full_name(name)
           new_file_name = "#{Screenshot.screenshot_area_abs}/#{name + "_diff"}.png"
           old_file_name = "#{Screenshot.screenshot_area_abs}/#{name}.png"
+
+          save_mode = ! File.exist?(old_file_name) #Save mode if no screen found
 
           FileUtils.mkdir_p File.dirname(old_file_name)
           comparison = ImageCompare.new(save_mode ? old_file_name : new_file_name,
