@@ -71,28 +71,28 @@ module Capybara
         def different?
           return nil unless old_file_exists?
 
-          puts(1)
+          #puts(1)
 
           old_file, new_file = load_image_files(@old_file_name, @new_file_name)
 
-          puts(2)
+          #puts(2)
 
           return not_different if old_file == new_file
 
-          puts(3)
+          #puts(3)
 
           images = load_images(old_file, new_file)
 
-          puts(4)
+          #puts(4)
 
           crop_images(images, @dimensions) if @dimensions
 
-          puts(5)
+          #puts(5)
 
           old_img = images.first
           new_img = images.last
 
-          puts(6)
+          #puts(6)
 
           if sizes_changed?(old_img, new_img)
             save_images(@annotated_new_file_name, new_img, @annotated_old_file_name, old_img)
@@ -103,22 +103,22 @@ module Capybara
             return true
           end
 
-          puts(7)
+          #puts(7)
 
           return not_different if old_img.pixels == new_img.pixels
 
-          puts(8)
+          #puts(8)
 
           @left, @top, @right, @bottom = find_diff_rectangle(old_img, new_img)
 
           return not_different if @top.nil?
           return not_different if @area_size_limit && size <= @area_size_limit
 
-          puts(9)
+          #puts(9)
 
           save_annotated_images(images)
 
-          puts(10)
+          #puts(10)
 
           true
         end

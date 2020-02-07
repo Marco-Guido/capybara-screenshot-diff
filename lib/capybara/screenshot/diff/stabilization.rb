@@ -23,10 +23,10 @@ module Capybara
         def take_simple_screenshot(comparison, color_distance_limit:, shift_distance_limit:,
                                    area_size_limit:, skip_area:, stability_time_limit:, wait:, save_mode:)  #Added by Progenda
           blurred_input = prepare_page_for_screenshot(timeout: wait)
-          puts("taking screenshot")
+          #puts("taking screenshot")
           take_right_size_screenshot(comparison)
           if ! save_mode
-            puts("checking diff")
+            puts("Checking diff")
             is_different = save_diff(comparison)
             clean_files(comparison, is_different)
           end
