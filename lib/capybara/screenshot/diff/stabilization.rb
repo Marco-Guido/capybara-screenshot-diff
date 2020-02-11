@@ -26,7 +26,6 @@ module Capybara
           #puts("taking screenshot")
           take_right_size_screenshot(comparison)
           if ! save_mode
-            puts("Checking diff")
             is_different = save_diff(comparison)
             return is_different
           end
