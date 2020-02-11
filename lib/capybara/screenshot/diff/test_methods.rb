@@ -72,7 +72,8 @@ module Capybara
             color_distance_limit: Diff.color_distance_limit,
             shift_distance_limit: Diff.shift_distance_limit, skip_area: Diff.skip_area,
             stability_time_limit: Screenshot.stability_time_limit,
-            wait: Capybara.default_max_wait_time
+            wait: Capybara.default_max_wait_time,
+            test_errored: false
         )
           return unless Screenshot.active?
           return if window_size_is_wrong?
@@ -84,30 +85,43 @@ module Capybara
             @screenshot_counter += 1
           end
           name = full_name(name)
-          new_file_name = "#{Screenshot.screenshot_area_abs}/#{name + "_diff"}.png"
+          new_file_name = "#{Screenshot.screenshot_area_abs}/#{name + (test_errored ? "_diff" : "errored")}.png"
           old_file_name = "#{Screenshot.screenshot_area_abs}/#{name}.png"
 
-          save_mode = ! File.exist?(old_file_name) #Save mode if no screen found
-
+          no_source = ! File.exist?(old_file_name) #Save mode if no screen found
           FileUtils.mkdir_p File.dirname(old_file_name)
-          comparison = ImageCompare.new(save_mode ? old_file_name : new_file_name,
-                                        save_mode ? nil : old_file_name,
+
+          if no_source #create a clean screenshot that will be the reference's one
+            comparison = ImageCompare.new(old_file_name,
+                                          dimensions: Screenshot.window_size, color_distance_limit: color_distance_limit,
+                                          area_size_limit: area_size_limit, shift_distance_limit: shift_distance_limit,
+                                          skip_area: skip_area)
+            take_simple_screenshot(comparison, color_distance_limit: color_distance_limit,
+                                   shift_distance_limit: shift_distance_limit,
+                                   area_size_limit: area_size_limit,
+                                   skip_area: skip_area,
+                                   stability_time_limit: stability_time_limit,
+                                   wait: wait,
+                                   save_mode: true)
+          end
+          comparison = ImageCompare.new(new_file_name, old_file_name,
               dimensions: Screenshot.window_size, color_distance_limit: color_distance_limit,
               area_size_limit: area_size_limit, shift_distance_limit: shift_distance_limit,
               skip_area: skip_area)
           #checkout_vcs(name, comparison)
-          take_simple_screenshot(comparison, color_distance_limit: color_distance_limit,
+          is_different = take_simple_screenshot(comparison, color_distance_limit: color_distance_limit,
                                              shift_distance_limit: shift_distance_limit,
                                              area_size_limit: area_size_limit,
                                              skip_area: skip_area,
                                              stability_time_limit: stability_time_limit,
                                              wait: wait,
-                                             save_mode: save_mode
+                                             save_mode: false
           )
-          return unless comparison.old_file_exists?
-
-          (@test_screenshots ||= []) << [caller(1..1).first, name, comparison]
-          true
+          clean_files(comparison, deep: ! is_different && ! test_errored) #do not remote screenshot if the result differs or test has failed
+          # return unless comparison.old_file_exists?
+          #
+          # (@test_screenshots ||= []) << [caller(1..1).first, name, comparison]
+          # true
         end
 
         def window_size_is_wrong?

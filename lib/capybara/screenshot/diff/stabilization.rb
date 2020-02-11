@@ -28,7 +28,7 @@ module Capybara
           if ! save_mode
             puts("Checking diff")
             is_different = save_diff(comparison)
-            clean_files(comparison, is_different)
+            return is_different
           end
         ensure
           blurred_input&.click
@@ -138,7 +138,7 @@ module Capybara
           return stabilization_comparison.different?
         end
 
-        def clean_files(comparison, is_different) #Added by Progenda
+        def clean_files(comparison, deep: false) #Added by Progenda
           if File.exist?(comparison.annotated_new_file_name)
             FileUtils.cp comparison.annotated_new_file_name, comparison.new_file_name
             File.delete(comparison.annotated_new_file_name)
@@ -146,7 +146,7 @@ module Capybara
           if File.exist?(comparison.annotated_old_file_name)
             File.delete(comparison.annotated_old_file_name)
           end
-          if ! is_different
+          if deep
             File.delete(comparison.new_file_name)
           end
         end
