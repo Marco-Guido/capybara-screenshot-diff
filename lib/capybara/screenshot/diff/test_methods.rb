@@ -85,7 +85,7 @@ module Capybara
             @screenshot_counter += 1
           end
           name = full_name(name)
-          new_file_name = "#{Screenshot.screenshot_area_abs}/#{name + (test_errored ? "_diff" : "_errored")}.png"
+          new_file_name = "#{Screenshot.screenshot_area_abs}/#{name + (test_errored ? "_errored" : "_diffs")}.png"
           old_file_name = "#{Screenshot.screenshot_area_abs}/#{name}.png"
 
           no_source = ! File.exist?(old_file_name) #Save mode if no screen found
