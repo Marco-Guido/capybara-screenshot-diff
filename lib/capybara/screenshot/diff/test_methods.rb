@@ -103,21 +103,22 @@ module Capybara
                                    stability_time_limit: stability_time_limit,
                                    wait: wait,
                                    save_mode: true)
+          else
+            comparison = ImageCompare.new(new_file_name, old_file_name,
+                                          dimensions: Screenshot.window_size, color_distance_limit: color_distance_limit,
+                                          area_size_limit: area_size_limit, shift_distance_limit: shift_distance_limit,
+                                          skip_area: skip_area)
+            #checkout_vcs(name, comparison)
+            is_different = take_simple_screenshot(comparison, color_distance_limit: color_distance_limit,
+                                                  shift_distance_limit: shift_distance_limit,
+                                                  area_size_limit: area_size_limit,
+                                                  skip_area: skip_area,
+                                                  stability_time_limit: stability_time_limit,
+                                                  wait: wait,
+                                                  save_mode: false
+            )
+            clean_files(comparison, deep: ! is_different && ! test_errored) #do not remote screenshot if the result differs or test has failed
           end
-          comparison = ImageCompare.new(new_file_name, old_file_name,
-              dimensions: Screenshot.window_size, color_distance_limit: color_distance_limit,
-              area_size_limit: area_size_limit, shift_distance_limit: shift_distance_limit,
-              skip_area: skip_area)
-          #checkout_vcs(name, comparison)
-          is_different = take_simple_screenshot(comparison, color_distance_limit: color_distance_limit,
-                                             shift_distance_limit: shift_distance_limit,
-                                             area_size_limit: area_size_limit,
-                                             skip_area: skip_area,
-                                             stability_time_limit: stability_time_limit,
-                                             wait: wait,
-                                             save_mode: false
-          )
-          clean_files(comparison, deep: ! is_different && ! test_errored) #do not remote screenshot if the result differs or test has failed
           # return unless comparison.old_file_exists?
           #
           # (@test_screenshots ||= []) << [caller(1..1).first, name, comparison]
