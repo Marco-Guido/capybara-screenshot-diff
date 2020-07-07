@@ -113,6 +113,7 @@ module Capybara
 
           return not_different if @top.nil?
           return not_different if @area_size_limit && size <= @area_size_limit
+          return not_different if length < 3 or width < 3 #added by progenda
 
           #puts(9)
 
@@ -139,6 +140,16 @@ module Capybara
           return unless @left || @top || @right || @bottom
 
           [@left, @top, @right, @bottom]
+        end
+
+        ####added by Progenda
+        def length
+          (@bottom - @top + 1)
+        end
+
+        ####added by Progenda
+        def width
+          (@right - @left + 1)
         end
 
         def size
