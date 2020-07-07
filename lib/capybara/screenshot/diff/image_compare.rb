@@ -113,7 +113,7 @@ module Capybara
 
           return not_different if @top.nil?
           return not_different if @area_size_limit && size <= @area_size_limit
-          return not_different if length < 3 or width < 3 #added by progenda
+          return not_different if length <= 3 or width <= 3 #added by progenda
 
           #puts(9)
 
