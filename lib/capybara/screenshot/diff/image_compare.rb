@@ -121,7 +121,7 @@ module Capybara
 
           #puts(10)
 
-          puts("difference found")
+          puts("difference found #{length}x#{width} pixels")
 
           true
         end
