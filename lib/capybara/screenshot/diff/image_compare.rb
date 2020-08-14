@@ -119,7 +119,10 @@ module Capybara
 
           save_annotated_images(images)
 
-          #puts(10)
+          puts(10)
+          puts("########################YES##################")
+          puts("########################YES##################")
+          puts("#{length} #{width}")
 
           true
         end
